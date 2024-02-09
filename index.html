@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K Matrix Generator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>K Matrix Generator</h2>
+    <label for="numBuses">Total Number of Buses (Nodes):</label>
+    <input type="number" id="numBuses" min="1" required>
+    <label for="numBranches">Total Number of Branches (Edges):</label>
+    <input type="number" id="numBranches" min="1" required>
+    <label for="referenceBus">Reference Bus:</label>
+    <input type="number" id="referenceBus" min="1" required>
+    <button onclick="generateKMatrix()">Generate K Matrix</button>
+    <h3>K Matrix</h3>
+    <div id="kMatrixContainer"></div>
+</div>
+
+<script>
+    function generateKMatrix() {
+        const numBuses = parseInt(document.getElementById('numBuses').value);
+        const numBranches = parseInt(document.getElementById('numBranches').value);
+        const referenceBus = parseInt(document.getElementById('referenceBus').value);
+        const kMatrixContainer = document.getElementById('kMatrixContainer');
+
+        // Generate K matrix
+        let kMatrixHTML = '<table>';
+        kMatrixHTML += '<tr><th></th>';
+        for (let i = 1; i <= numBuses; i++) {
+            if (i !== referenceBus) {
+                kMatrixHTML += `<th>Node ${i}</th>`;
+            }
+        }
+        kMatrixHTML += '</tr>';
+
+        for (let j = 1; j <= numBranches; j++) {
+            kMatrixHTML += `<tr><th>Branch ${j}</th>`;
+            for (let i = 1; i <= numBuses; i++) {
+                if (i !== referenceBus) {
+                    const direction = prompt(`Direction of Branch ${j} to Node ${i}: Enter 1 for towards, -1 for away, or 0 if not connected`);
+                    kMatrixHTML += `<td>${parseInt(direction)}</td>`;
+                }
+            }
+            kMatrixHTML += '</tr>';
+        }
+        kMatrixHTML += '</table>';
+
+        kMatrixContainer.innerHTML = kMatrixHTML;
+    }
+</script>
+</body>
+</html>
